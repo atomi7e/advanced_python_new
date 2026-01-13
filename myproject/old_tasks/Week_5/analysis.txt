@@ -1,0 +1,10 @@
+Total lines: 3
+Total words: 10
+Word frequency:
+bla: 4
+my: 1
+name: 1
+is: 1
+blalblabla: 1
+i: 1
+love: 1
