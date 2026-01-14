@@ -15,7 +15,7 @@ class Student(Person):
         print(f"Hello, I am a student {self._name}. My ID: {self.student_id}.")
 
 person = Person("Oleg", 40)
-student = Student("Artem", 20, "SE-2305")
+student = Student("Artem", 20, "SE-2409")
 
 people = [person, student]
 
