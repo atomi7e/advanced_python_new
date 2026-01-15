@@ -24,7 +24,7 @@ for student in data:
     student_info = {
         "name": student["name"],
         "age": student["age"],
-        "average_grade": round(avg_grade, 2)
+        "average_grade": round(avg_grade, 0)
     }
     updated_data.append(student_info)
 
