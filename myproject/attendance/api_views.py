@@ -84,3 +84,53 @@ def api_mark_attendance(request):
         status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
     )
 
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def api_attendance_detail(request, attendance_id):
+    try:
+        attendance = Attendance.objects.select_related('student', 'class_enrolled').get(id=attendance_id)
+    except Attendance.DoesNotExist:
+        return Response(
+            {'error': 'Attendance record not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    if request.method == 'GET':
+        serializer = AttendanceSerializer(attendance)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        status_val = request.data.get('status', attendance.status)
+        notes = request.data.get('notes', attendance.notes)
+        
+        if status_val not in ['present', 'absent', 'late']:
+            return Response(
+                {'error': 'Invalid status. Must be: present, absent, or late'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        date_str = request.data.get('date')
+        if date_str:
+            try:
+                attendance_date = date.fromisoformat(date_str)
+                attendance.date = attendance_date
+            except (ValueError, TypeError):
+                return Response(
+                    {'error': 'Invalid date format. Use YYYY-MM-DD'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        attendance.status = status_val
+        attendance.notes = notes
+        attendance.save()
+        
+        serializer = AttendanceSerializer(attendance)
+        return Response(serializer.data)
+    
+    elif request.method == 'DELETE':
+        attendance.delete()
+        return Response(
+            {'message': 'Attendance record deleted successfully'},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
