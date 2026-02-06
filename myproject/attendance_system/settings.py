@@ -133,3 +133,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Разрешаем запросы с любого хоста (для тестов)
+ALLOWED_HOSTS = ['*']
+
+# Разрешаем Django доверять домену ngrok (иначе будет ошибка 403 Forbidden при отправке форм)
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'http://localhost:8000',
+]
